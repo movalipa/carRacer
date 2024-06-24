@@ -23,8 +23,8 @@ namespace carRacer
         class Car
         {
             // config
-            static int maxSteering = 16;
-            static int maxSpeed = 20;
+            static int maxSteering = 28;
+            static int maxSpeed = 36;
             static int damageValue = 10;
             static int repairMultiplier = 3;
 
@@ -78,15 +78,13 @@ namespace carRacer
 
         int roadMargin = 10;// 84
 
-        int progressBarContainerWidth = 200;
+        int progressBarContainerWidth = 400;
         string state = "landpage";
         bool isRightDown = false;
         bool isLeftDown = false;
         string keyState = "";
 
-        Point myCarInitialLocation = new Point(208, 494);
-
-        Point landpageInitialLocation = new Point(46, 46);
+        Point myCarInitialLocation = new Point(384, 1054);
 
         abstract class RoadMark
         {
@@ -164,7 +162,7 @@ namespace carRacer
             protected override void retract()
             {
                 Point p1_tmp = new Point(p1.X, -80);
-                Point p2_tmp = new Point(p2.X, 668);
+                Point p2_tmp = new Point(p2.X, 1425);
                 p1 = p1_tmp;
                 p2 = p2_tmp;
             }
@@ -182,7 +180,7 @@ namespace carRacer
             bool active = false;
             static int defaultMovePortion = 6;
             private Bitmap[] skins;
-            int skinsCount = 8;
+            int skinsCount = 0;
             static int blockActivationFor = 0;
             double multiplier = 0;
 
@@ -190,6 +188,7 @@ namespace carRacer
             {
                 picBox = pb;
                 skins = sk;
+                skinsCount = skins.Length;
                 multiplier = mult;
                 retract();
             }
@@ -205,13 +204,13 @@ namespace carRacer
                 Point tmp = new Point(picBox.Location.X, picBox.Location.Y + Convert.ToInt32(movePortion * multiplier));
                 picBox.Location = tmp;
 
-                if (picBox.Location.Y >= 668)
+                if (picBox.Location.Y >= 1425)
                     retract();
             }
 
             public void retract()
             {
-                Point tmp = new Point(picBox.Location.X, -120);
+                Point tmp = new Point(picBox.Location.X, -240);
                 picBox.Location = tmp;
                 active = false;
             }
@@ -335,7 +334,7 @@ namespace carRacer
         void initiateRoadMarks()
         {
             int upperBound = -80, lowerBound = pictureBox1.Height;
-            int leftBound = 70, rightBound = pictureBox1.Width - leftBound;
+            int leftBound = 130, rightBound = pictureBox1.Width - leftBound;
             int viewportWidth = rightBound - leftBound;
             int linesCount = 4;
             int portion = viewportWidth / linesCount;
@@ -401,8 +400,8 @@ namespace carRacer
         }
         void updateProgressBar(Panel pnl, int value)
         {
-            int multiplier = progressBarContainerWidth / 100;
-            pnl.Width = value * multiplier;
+            double multiplier = progressBarContainerWidth / 100;
+            pnl.Width = Convert.ToInt32(value * multiplier);
             if (value >= 70)
                 pnl.BackColor = Color.GreenYellow;
             else if (value >= 30)
@@ -523,24 +522,24 @@ namespace carRacer
         {
             if (e.KeyCode == Keys.Escape && state == "playing")
                 endGame();
-            
+
             if (e.KeyCode == Keys.Space && state == "landpage")
                 startGame();
-            
+
             if (e.KeyCode == Keys.Space && state == "crash")
                 endGame();
-            
+
             if (e.KeyCode == Keys.Right)
                 isRightDown = true;
-            
+
             if (e.KeyCode == Keys.Left)
                 isLeftDown = true;
-            
+
             manageKeyState();
 
             if (state == "landpage")
                 changeMyCar(keyState);
-            
+
         }
         void Form1_KeyUp(object sender, KeyEventArgs e)
         {
@@ -570,7 +569,7 @@ namespace carRacer
 
             if (state == "landpage")
                 updateRepairMsg();
-            
+
         }
         void updateRepairMsg()
         {
@@ -616,6 +615,9 @@ namespace carRacer
         }
         void inGameEscape_Click(object sender, EventArgs e)
         {
+            if (state != "playing")
+                return;
+
             endGame();
         }
         void timer_Tick(object sender, EventArgs e)
