@@ -8,7 +8,7 @@ using static System.Windows.Forms.AxHost;
 // todo
 // as the car gets damage it should get less controlabel and speed or delay
 // countdown before start
-// crash icon on crash
+// crash icon on crash x
 
 
 namespace carRacer
