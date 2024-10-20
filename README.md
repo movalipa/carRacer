@@ -1,7 +1,7 @@
 # Car Racer
 ### A simple yet fun game to play
 
-![intro](./video.gif)
+![intro](./intro.gif)
 
 ![intro](./home.png)
 
